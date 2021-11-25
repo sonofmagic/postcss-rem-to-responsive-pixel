@@ -1,9 +1,9 @@
 {
-  "name": "npm-lib-template",
+  "name": "postcss-rem-to-responsive-pixel",
   "version": "1.0.0",
-  "description": "npm-lib-template",
+  "description": "postcss-rem-to-responsive-pixel",
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sonofmagic/npm-lib-template.git"
+    "url": "git+https://github.com/sonofmagic/postcss-rem-to-responsive-pixel.git"
   },
   "files": [
     "dist"
@@ -26,9 +26,9 @@
   "author": "SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sonofmagic/npm-lib-template/issues"
+    "url": "https://github.com/sonofmagic/postcss-rem-to-responsive-pixel/issues"
   },
-  "homepage": "https://github.com/sonofmagic/npm-lib-template#readme",
+  "homepage": "https://github.com/sonofmagic/postcss-rem-to-responsive-pixel#readme",
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.8",
     "@rollup/plugin-commonjs": "^21.0.1",
@@ -46,10 +46,14 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "5.1.1",
     "jest": "^27.3.1",
+    "postcss": "^8.4.1",
     "rollup": "^2.60.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
     "typescript": "^4.4.4"
+  },
+  "peerDependencies": {
+    "postcss": "^8.4.1"
   }
 }
