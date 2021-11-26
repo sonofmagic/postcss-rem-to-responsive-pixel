@@ -1,7 +1,10 @@
 import remRegex from './rem-unit-regex'
 import * as filterPropList from './filter-prop-list'
 import type { PluginCreator } from 'postcss'
-const defaults = {
+import type { UserDefinedOptions } from './types'
+import type from './types'
+
+const defaults: UserDefinedOptions = {
   rootValue: 16,
   unitPrecision: 5,
   selectorBlackList: [],
@@ -9,60 +12,31 @@ const defaults = {
   replace: true,
   mediaQuery: false,
   minRemValue: 0,
-  exclude: null
+  exclude: null,
+  transformUnit: 'px'
 }
 
-const legacyOptions = {
-  root_value: 'rootValue',
-  unit_precision: 'unitPrecision',
-  selector_black_list: 'selectorBlackList',
-  prop_white_list: 'propList',
-  media_query: 'mediaQuery',
-  propWhiteList: 'propList'
-}
-
-function convertLegacyOptions (options) {
-  if (typeof options !== 'object') return
-  if (
-    ((typeof options.prop_white_list !== 'undefined' &&
-      options.prop_white_list.length === 0) ||
-      (typeof options.propWhiteList !== 'undefined' &&
-        options.propWhiteList.length === 0)) &&
-    typeof options.propList === 'undefined'
-  ) {
-    options.propList = ['*']
-    delete options.prop_white_list
-    delete options.propWhiteList
-  }
-  Object.keys(legacyOptions).forEach(key => {
-    if (Reflect.has(options, key)) {
-      options[legacyOptions[key]] = options[key]
-      delete options[key]
-    }
-  })
-}
-
-function createPxReplace (rootValue, unitPrecision, minPixelValue) {
-  return (m, $1) => {
+function createRemReplace(rootValue: number, unitPrecision: number, minRemValue: number, transformUnit = 'px') {
+  return function (m, $1) {
     if (!$1) return m
-    const pixels = parseFloat($1)
-    if (pixels < minPixelValue) return m
-    const fixedVal = toFixed(pixels / rootValue, unitPrecision)
-    return fixedVal === 0 ? '0' : fixedVal + 'rem'
+    const rems = parseFloat($1)
+    if (rems < minRemValue) return m
+    const fixedVal = toFixed((rems * rootValue), unitPrecision)
+    return (fixedVal === 0) ? '0' : fixedVal + transformUnit
   }
 }
 
-function toFixed (number, precision) {
+function toFixed(number, precision) {
   const multiplier = Math.pow(10, precision + 1)
   const wholeNumber = Math.floor(number * multiplier)
   return (Math.round(wholeNumber / 10) * 10) / multiplier
 }
 
-function declarationExists (decls, prop, value) {
+function declarationExists(decls, prop, value) {
   return decls.some(decl => decl.prop === prop && decl.value === value)
 }
 
-function blacklistedSelector (blacklist, selector) {
+function blacklistedSelector(blacklist, selector) {
   if (typeof selector !== 'string') return
   return blacklist.some(regex => {
     if (typeof regex === 'string') {
@@ -72,9 +46,9 @@ function blacklistedSelector (blacklist, selector) {
   })
 }
 
-function createPropListMatcher (propList) {
+function createPropListMatcher(propList) {
   const hasWild = propList.indexOf('*') > -1
-  const matchAll = hasWild && propList.length === 1
+  const matchAll = (hasWild && propList.length === 1)
   const lists = {
     exact: filterPropList.exact(propList),
     contain: filterPropList.contain(propList),
@@ -85,10 +59,11 @@ function createPropListMatcher (propList) {
     notStartWith: filterPropList.notStartWith(propList),
     notEndWith: filterPropList.notEndWith(propList)
   }
-  return prop => {
+  return function (prop) {
     if (matchAll) return true
     return (
-      (hasWild ||
+      (
+        hasWild ||
         lists.exact.indexOf(prop) > -1 ||
         lists.contain.some(function (m) {
           return prop.indexOf(m) > -1
@@ -98,7 +73,8 @@ function createPropListMatcher (propList) {
         }) ||
         lists.endWith.some(function (m) {
           return prop.indexOf(m) === prop.length - m.length
-        })) &&
+        })
+      ) &&
       !(
         lists.notExact.indexOf(prop) > -1 ||
         lists.notContain.some(function (m) {
@@ -115,66 +91,78 @@ function createPropListMatcher (propList) {
   }
 }
 
-module.exports = (options = {}) => {
-  convertLegacyOptions(options)
+const plugin: PluginCreator<UserDefinedOptions> = (options: typeof defaults) => {
+  if (typeof options === 'undefined') {
+    throw new Error('postcss-rem-to-responsive-pixel plugin does not have the correct options')
+  }
   const opts = Object.assign({}, defaults, options)
+
+
   const satisfyPropList = createPropListMatcher(opts.propList)
-  const exclude = opts.exclude
-  let isExcludeFile = false
-  let pxReplace
+  const exclude = opts.exclude;
+
+  let isExcludeFile = false;
+  let pxReplace;
   return {
-    postcssPlugin: 'postcss-pxtorem',
-    Once (css) {
-      const filePath = css.source.input.file
+    postcssPlugin: 'postcss-rem-to-responsive-pixel',
+    Once(css) {
+      const filePath = css.source.input.file;
       if (
         exclude &&
-        ((type.isFunction(exclude) && exclude(filePath)) ||
-          (type.isString(exclude) && filePath.indexOf(exclude) !== -1) ||
-          filePath.match(exclude) !== null)
+        ((type.isFunction(exclude) && (exclude as ((filePath: string) => boolean))(filePath)) ||
+          (type.isString(exclude) && filePath.indexOf(exclude as string) !== -1) ||
+          filePath.match(exclude as RegExp) !== null)
       ) {
-        isExcludeFile = true
+        isExcludeFile = true;
       } else {
-        isExcludeFile = false
+        isExcludeFile = false;
       }
 
       const rootValue =
-        typeof opts.rootValue === 'function'
+        typeof opts.rootValue === "function"
           ? opts.rootValue(css.source.input)
-          : opts.rootValue
-      pxReplace = createPxReplace(
+          : opts.rootValue;
+      pxReplace = createRemReplace(
         rootValue,
         opts.unitPrecision,
-        opts.minPixelValue
-      )
+        opts.minRemValue,
+        opts.transformUnit
+      );
     },
-    Declaration (decl) {
-      if (isExcludeFile) return
+    Declaration(decl) {
+      if (isExcludeFile) return;
 
       if (
-        decl.value.indexOf('px') === -1 ||
+        decl.value.indexOf("rem") === -1 ||
         !satisfyPropList(decl.prop) ||
         blacklistedSelector(opts.selectorBlackList, decl.parent.selector)
-      ) { return }
+      ) {
+        return;
+      }
 
-      const value = decl.value.replace(pxRegex, pxReplace)
+
+      const value = decl.value.replace(remRegex, pxReplace);
 
       // if rem unit already exists, do not add or replace
-      if (declarationExists(decl.parent, decl.prop, value)) return
+      if (declarationExists(decl.parent, decl.prop, value)) return;
 
       if (opts.replace) {
-        decl.value = value
+        decl.value = value;
       } else {
-        decl.cloneAfter({ value: value })
+        decl.cloneAfter({ value: value });
       }
     },
-    AtRule (atRule) {
-      if (isExcludeFile) return
+    AtRule(atRule) {
+      if (isExcludeFile) return;
 
-      if (opts.mediaQuery && atRule.name === 'media') {
-        if (atRule.params.indexOf('px') === -1) return
-        atRule.params = atRule.params.replace(pxRegex, pxReplace)
+      if (opts.mediaQuery && atRule.name === "media") {
+        if (atRule.params.indexOf("rem") === -1) return;
+        atRule.params = atRule.params.replace(remRegex, pxReplace);
       }
     }
   }
 }
-module.exports.postcss = true
+
+plugin.postcss = true
+
+export default plugin
