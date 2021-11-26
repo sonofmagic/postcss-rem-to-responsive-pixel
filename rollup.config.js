@@ -8,8 +8,8 @@ const config = {
   output: [
     {
       file: pkg.main,
-      format: 'cjs'
-      // exports: 'auto'
+      format: 'cjs',
+      exports: 'auto'
     },
     { format: 'esm', file: pkg.module }
   ],

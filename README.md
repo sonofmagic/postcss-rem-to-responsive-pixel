@@ -20,6 +20,39 @@ this plugin use like [postcss-rem-to-pixel](https://www.npmjs.com/package/postcs
 
 Thanks to the author of `postcss-rem-to-pixel` and `postcss-pxtorem`.
 
+if you use with `tailwindcss` and [`tailwindcss-miniprogram-preset`](https://www.npmjs.com/package/tailwindcss-miniprogram-preset)
+
+you may should close the rem2rpx in this preset:
+
+```js
+// tailwind.config.js
+const { createPreset } = require('tailwindcss-miniprogram-preset')
+module.exports = {
+  presets: [
+    createPreset({
+      rem2rpx: false,
+    }),
+  ],
+}
+```
+
+and set below options:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('autoprefixer'),
+    require('tailwindcss'),
+    require('postcss-rem-to-responsive-pixel')({
+      rootValue: 32,
+      propList: ['*'],
+      transformUnit: 'rpx',
+    }),
+  ],
+}
+```
+
 ### Input/Output
 
 _With the default settings, only font related properties are targeted._
@@ -87,29 +120,22 @@ Default:
     - `function (file) { return file.indexOf('exclude') !== -1; }`
 - `transformUnit` (`px` or `rpx`) The transform output unit.
 
-### Use with gulp-postcss and autoprefixer
+### Use with postcss.config.js
 
 ```js
-var gulp = require('gulp')
-var postcss = require('gulp-postcss')
-var autoprefixer = require('autoprefixer')
-var remToPx = require('postcss-rem-to-pixel')
-
-gulp.task('css', function () {
-  var processors = [
-    autoprefixer({
-      browsers: 'last 1 version',
+// postcss.config.js
+module.exports = {
+  plugins: [
+    // for example
+    // require('autoprefixer'),
+    // require('tailwindcss'),
+    require('postcss-rem-to-responsive-pixel')({
+      rootValue: 32,
+      propList: ['*'],
+      transformUnit: 'rpx',
     }),
-    remToPx({
-      replace: false,
-    }),
-  ]
-
-  return gulp
-    .src(['build/css/**/*.css'])
-    .pipe(postcss(processors))
-    .pipe(gulp.dest('build/css'))
-})
+  ],
+}
 ```
 
 ### A message about ignoring properties
