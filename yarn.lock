@@ -3084,6 +3084,11 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+postcss-pxtorem@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.nlark.com/postcss-pxtorem/download/postcss-pxtorem-6.0.0.tgz#f228a4d05d8a73f0642eabae950e2b19836366d7"
+  integrity sha1-8iik0F2Kc/BkLquulQ4rGYNjZtc=
+
 postcss@^8.4.1:
   version "8.4.1"
   resolved "https://registry.npmmirror.com/postcss/download/postcss-8.4.1.tgz#73051f825509ad1a716ef500108001bf3d1fa8f7"

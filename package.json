@@ -1,7 +1,7 @@
 {
   "name": "postcss-rem-to-responsive-pixel",
   "version": "1.0.0",
-  "description": "postcss-rem-to-responsive-pixel",
+  "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
@@ -22,8 +22,25 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "keywords": [],
-  "author": "SonOfMagic <qq1324318532@gmail.com>",
+  "keywords": [
+    "css",
+    "rem",
+    "pixel",
+    "px",
+    "postcss",
+    "postcss-plugin",
+    "rpx",
+    "uni-app",
+    "uni",
+    "wechat",
+    "mp",
+    "miniprogram",
+    "小程序",
+    "微信",
+    "tailwindcss",
+    "preset"
+  ],
+  "author": "cuth, jesstech, SonOfMagic <qq1324318532@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sonofmagic/postcss-rem-to-responsive-pixel/issues"
@@ -47,6 +64,7 @@
     "eslint-plugin-promise": "5.1.1",
     "jest": "^27.3.1",
     "postcss": "^8.4.1",
+    "postcss-pxtorem": "^6.0.0",
     "rollup": "^2.60.0",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
