@@ -92,9 +92,9 @@ function createPropListMatcher(propList) {
 }
 
 const plugin: PluginCreator<UserDefinedOptions> = (options: typeof defaults) => {
-  if (typeof options === 'undefined') {
-    throw new Error('postcss-rem-to-responsive-pixel plugin does not have the correct options')
-  }
+  // if (typeof options === 'undefined') {
+  //   throw new Error('postcss-rem-to-responsive-pixel plugin does not have the correct options')
+  // }
   const opts = Object.assign({}, defaults, options)
 
 
