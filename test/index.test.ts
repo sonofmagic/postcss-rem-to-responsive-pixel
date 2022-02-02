@@ -1,6 +1,6 @@
 import postcss from 'postcss'
-import remToPx from '@/index'
-import * as filterPropList from '@/filter-prop-list'
+import remToPx from '../src/index'
+import * as filterPropList from '../src/filter-prop-list'
 const pxToRem = require('postcss-pxtorem')
 const basicCSS = '.rule { font-size: 0.9375rem }'
 
@@ -59,9 +59,11 @@ describe('remToPx', function () {
       'h1 { margin: 0 0 20px; font-size: 2rem; line-height: 1.2; letter-spacing: 0.0625rem; }'
     const output =
       'h1 { margin: 0 0 20px; font-size: 32rpx; line-height: 1.2; letter-spacing: 1rpx; }'
-    const processed = postcss(remToPx({
-      transformUnit: 'rpx'
-    })).process(input).css
+    const processed = postcss(
+      remToPx({
+        transformUnit: 'rpx'
+      })
+    ).process(input).css
 
     expect(processed).toBe(output)
   })

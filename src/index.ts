@@ -2,7 +2,6 @@ import { remRegex } from './regex'
 import * as filterPropList from './filter-prop-list'
 import type { PluginCreator, ChildNode, Container } from 'postcss'
 import type { UserDefinedOptions } from './types'
-import type from './types'
 
 const defaults: UserDefinedOptions = {
   rootValue: 16,
@@ -123,11 +122,9 @@ const plugin: PluginCreator<UserDefinedOptions> = (
       const filePath = source!.input.file as string
       if (
         exclude &&
-        ((type.isFunction(exclude) &&
-          (exclude as (filePath: string) => boolean)(filePath)) ||
-          (type.isString(exclude) &&
-            filePath.indexOf(exclude as string) !== -1) ||
-          filePath.match(exclude as RegExp) !== null)
+        ((typeof exclude === 'function' && exclude(filePath)) ||
+          (typeof exclude === 'string' && filePath.indexOf(exclude) !== -1) ||
+          (exclude as RegExp).exec(filePath) !== null)
       ) {
         isExcludeFile = true
       } else {
