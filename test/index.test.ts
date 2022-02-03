@@ -8,7 +8,7 @@ let pxToRem: any
 if (process.env.PostcssVersion === '7') {
   postcss = require('postcss7')
   // ../src/index.postcss7
-  remToPx = require('../dist/postcss7')
+  remToPx = require('../postcss7.js')
   pxToRem = require('postcss-pxtorem7')
 } else {
   postcss = require('postcss')

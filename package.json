@@ -1,6 +1,6 @@
 {
   "name": "postcss-rem-to-responsive-pixel",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -16,7 +16,8 @@
     "url": "git+https://github.com/sonofmagic/postcss-rem-to-responsive-pixel.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "postcss7.js"
   ],
   "publishConfig": {
     "access": "public",
