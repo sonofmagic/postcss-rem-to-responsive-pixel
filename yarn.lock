@@ -3309,12 +3309,19 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+"postcss-pxtorem7@npm:postcss-pxtorem@5.1.1":
+  version "5.1.1"
+  resolved "https://registry.npmmirror.com/postcss-pxtorem/-/postcss-pxtorem-5.1.1.tgz#198a68c10f9ad2d42370ef66299d7b3168f8cffa"
+  integrity sha512-uvgIujL/pn0GbZ+rczESD2orHsbXrrCqi+q9wJO8PCk3ZGCoVVtu5hZTbtk+tbZHZP5UkTfCvqOrTZs9Ncqfsg==
+  dependencies:
+    postcss "^7.0.27"
+
 postcss-pxtorem@^6.0.0:
   version "6.0.0"
   resolved "https://registry.nlark.com/postcss-pxtorem/download/postcss-pxtorem-6.0.0.tgz#f228a4d05d8a73f0642eabae950e2b19836366d7"
   integrity sha1-8iik0F2Kc/BkLquulQ4rGYNjZtc=
 
-"postcss7@npm:postcss@7.0.39":
+"postcss7@npm:postcss@7.0.39", postcss@^7.0.27:
   version "7.0.39"
   resolved "https://registry.npmmirror.com/postcss/-/postcss-7.0.39.tgz#9624375d965630e2e1f2c02a935c82a59cb48309"
   integrity sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA==

@@ -1,13 +1,16 @@
 import typescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import pkg from './package.json'
+// import pkg from './package.json'
 /** @type {import('rollup').RollupOptions} */
 const config = {
-  input: 'src/index.ts',
+  input: {
+    index: 'src/index.ts',
+    postcss7: 'src/index.postcss7.ts'
+  },
   output: [
     {
-      file: pkg.main,
+      dir: 'dist',
       format: 'cjs',
       exports: 'auto'
     }
@@ -20,6 +23,10 @@ const config = {
     }),
     commonjs(),
     typescript({ tsconfig: './tsconfig.build.json' })
+  ],
+  external: [
+    'postcss',
+    'postcss7'
   ]
 }
 

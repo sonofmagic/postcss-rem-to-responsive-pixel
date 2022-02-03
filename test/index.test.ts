@@ -4,14 +4,18 @@ import type { PostcssRemToResponsivePixel } from '../src/types'
 
 let postcss: Postcss
 let remToPx: PostcssRemToResponsivePixel
+let pxToRem: any
 if (process.env.PostcssVersion === '7') {
   postcss = require('postcss7')
-  remToPx = require('../src/index.postcss7').default
+  // ../src/index.postcss7
+  remToPx = require('../dist/postcss7')
+  pxToRem = require('postcss-pxtorem7')
 } else {
   postcss = require('postcss')
-  remToPx = require('../src/index').default
+  remToPx = require('..')
+  pxToRem = require('postcss-pxtorem')
 }
-const pxToRem = require('postcss-pxtorem')
+
 const basicCSS = '.rule { font-size: 0.9375rem }'
 
 describe('remToPx', function () {
