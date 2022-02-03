@@ -1,4 +1,5 @@
-import type { Input } from 'postcss'
+import type { Input, PluginCreator } from 'postcss'
+
 export interface UserDefinedOptions {
   rootValue?: number | ((input: Input) => number)
   unitPrecision?: number
@@ -10,3 +11,5 @@ export interface UserDefinedOptions {
   exclude?: string | RegExp | ((filePath: string) => boolean)
   transformUnit?: 'px' | 'rpx'
 }
+
+export type PostcssRemToResponsivePixel = PluginCreator<UserDefinedOptions>

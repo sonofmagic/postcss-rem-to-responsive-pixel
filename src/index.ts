@@ -1,6 +1,5 @@
 import { remRegex } from './regex'
-import type { PluginCreator } from 'postcss'
-import type { UserDefinedOptions } from './types'
+import type { UserDefinedOptions, PostcssRemToResponsivePixel } from './types'
 import {
   blacklistedSelector,
   createPropListMatcher,
@@ -9,7 +8,7 @@ import {
   postcssPlugin,
   getConfig
 } from './shared'
-const plugin: PluginCreator<UserDefinedOptions> = (
+const plugin: PostcssRemToResponsivePixel = (
   options: UserDefinedOptions = {}
 ) => {
   const opts = getConfig(options)

@@ -3,12 +3,12 @@
   "version": "5.0.2",
   "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "build:tsc": "tsc --build tsconfig.json",
     "test": "jest",
+    "test:7": "cross-env PostcssVersion=7 jest",
     "init:rename": "node scripts/init/rename.js"
   },
   "repository": {
@@ -60,6 +60,7 @@
     "@types/node": "^17.0.14",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
+    "cross-env": "^7.0.3",
     "defu": "^5.0.1",
     "eslint": "8.8.0",
     "eslint-config-standard": "^16.0.3",

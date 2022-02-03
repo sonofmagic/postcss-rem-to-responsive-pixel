@@ -1,6 +1,16 @@
-import postcss from 'postcss'
-import remToPx from '../src/index'
 import * as filterPropList from '../src/filter-prop-list'
+import type { Postcss } from 'postcss'
+import type { PostcssRemToResponsivePixel } from '../src/types'
+
+let postcss: Postcss
+let remToPx: PostcssRemToResponsivePixel
+if (process.env.PostcssVersion === '7') {
+  postcss = require('postcss7')
+  remToPx = require('../src/index.postcss7').default
+} else {
+  postcss = require('postcss')
+  remToPx = require('../src/index').default
+}
 const pxToRem = require('postcss-pxtorem')
 const basicCSS = '.rule { font-size: 0.9375rem }'
 

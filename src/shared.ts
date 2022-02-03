@@ -46,7 +46,10 @@ export function declarationExists (
   return decls.some((decl) => decl.prop === prop && decl.value === value)
 }
 
-export function blacklistedSelector (blacklist: string[], selector: string) {
+export function blacklistedSelector (
+  blacklist: (string | RegExp)[],
+  selector?: string
+) {
   if (typeof selector !== 'string') return
   return blacklist.some((regex) => {
     if (typeof regex === 'string') {
