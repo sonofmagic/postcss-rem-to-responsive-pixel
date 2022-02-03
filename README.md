@@ -3,7 +3,7 @@
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates px or rpx units from rem units.
 
 - Rewrite with `typescript` and well tested.
-- Support `Postcss8` !
+- Support `Postcss7` and `Postcss8` !
 - TransformUnit Support `px` and `rpx` ! (for those miniprogram developers who use my [tailwindcss-miniprogram-preset](https://github.com/sonofmagic/tailwindcss-miniprogram-preset))
 
 ## Install
@@ -13,6 +13,13 @@ $ yarn add -D postcss-rem-to-responsive-pixel
 ```
 
 ## Usage
+
+```js
+// postcss 8:
+require('postcss-rem-to-responsive-pixel')
+// postcss 7:
+require('postcss-rem-to-responsive-pixel/postcss7')
+```
 
 When you use `tailwindcss` to write your website or miniprogram(Chinese Developer knows **LOL**) , the default unit is `rem`, so sometimes we have to transform our unit to `px` or `rpx`.
 

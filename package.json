@@ -1,6 +1,6 @@
 {
   "name": "postcss-rem-to-responsive-pixel",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -27,6 +27,8 @@
     "postcss-plugin",
     "postcss-rem",
     "postcss-pxtorem",
+    "postcss7",
+    "postcss8",
     "responsive",
     "css",
     "rem",
@@ -43,7 +45,7 @@
     "tailwindcss",
     "preset"
   ],
-  "author": "cuth, jesstech, SonOfMagic <qq1324318532@gmail.com>",
+  "author": "SonOfMagic <qq1324318532@gmail.com>, cuth, jesstech",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sonofmagic/postcss-rem-to-responsive-pixel/issues"
@@ -70,13 +72,13 @@
     "jest": "^27.4.7",
     "postcss": "^8.4.6",
     "postcss-pxtorem": "^6.0.0",
+    "postcss-pxtorem7": "npm:postcss-pxtorem@5.1.1",
     "postcss7": "npm:postcss@7.0.39",
     "rollup": "^2.67.0",
     "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.5",
-    "postcss-pxtorem7": "npm:postcss-pxtorem@5.1.1"
+    "typescript": "^4.5.5"
   },
   "peerDependencies": {},
   "dependencies": {}
