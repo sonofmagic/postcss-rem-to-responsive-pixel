@@ -1,6 +1,6 @@
 {
   "name": "postcss-rem-to-responsive-pixel",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "build:tsc": "tsc --build tsconfig.json",
     "test": "jest",
-    "test:7": "cross-env PostcssVersion=7 jest",
+    "test7": "cross-env PostcssVersion=7 jest",
     "init:rename": "node scripts/init/rename.js"
   },
   "repository": {
