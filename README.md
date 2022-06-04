@@ -76,9 +76,9 @@ h1 {
 // output
 h1 {
   margin: 0 0 20px;
-  font-size: 32px;
+  font-size: 64rpx;
   line-height: 1.2;
-  letter-spacing: 1px;
+  letter-spacing: 2rpx;
 }
 ```
 
