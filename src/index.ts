@@ -66,7 +66,7 @@ const plugin: PostcssRemToResponsivePixel = (
       if (opts.replace) {
         decl.value = value
       } else {
-        decl.cloneAfter({ value: value })
+        decl.cloneAfter({ value })
       }
     },
     AtRule (atRule) {

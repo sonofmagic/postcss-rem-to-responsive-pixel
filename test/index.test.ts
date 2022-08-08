@@ -152,7 +152,7 @@ describe('propList', function () {
     const rules =
       '.rule { font-size: 1rem; margin: 1rem; margin-left: 0.5rem; padding: 0.5rem; padding-right: 1rem }'
     const expected =
-      '.rule { font-size: 16px; margin: 16px; margin-left: 0.5rem; padding: 0.5rem; padding-right: 16px }'
+      '.rule { font-size: 16px; margin: 16px; margin-left: 0.5rem; padding: 8px; padding-right: 16px }'
     const options = {
       propList: ['*font*', 'margin*', '!margin-left', '*-right', 'pad']
     }
@@ -269,7 +269,7 @@ describe('minRemValue', function () {
 describe('pxToRem', function () {
   it('should convert from px to rem and back using postcss-pxtorem', function () {
     const input =
-      'h1 { margin: 0 0 20px 0.5rem; font-size: 13px; line-height: 1.2; letter-spacing: 1px; }'
+      'h1 { margin: 0 0 20px 8px; font-size: 13px; line-height: 1.2; letter-spacing: 1px; }'
     const toRems = postcss(pxToRem()).process(input).css
     const processed = postcss(remToPx()).process(toRems).css
 
