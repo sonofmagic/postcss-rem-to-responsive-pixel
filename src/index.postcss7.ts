@@ -40,7 +40,7 @@ const plugin = postcss7.plugin(
         if (opts.replace) {
           decl.value = value
         } else {
-          decl.parent.insertAfter(i, decl.clone({ value: value }))
+          decl.parent.insertAfter(i, decl.clone({ value }))
         }
       })
 

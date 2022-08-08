@@ -1,11 +1,11 @@
 /* eslint-disable no-useless-escape */
-export function exact(list: string[]) {
+export function exact (list: string[]) {
   return list.filter((m) => {
     return m.match(/^[^\*\!]+$/)
   })
 }
 
-export function contain(list: string[]) {
+export function contain (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\*.+\*$/)
@@ -15,7 +15,7 @@ export function contain(list: string[]) {
     })
 }
 
-export function endWith(list: string[]) {
+export function endWith (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\*[^\*]+$/)
@@ -24,7 +24,7 @@ export function endWith(list: string[]) {
       return m.slice(1)
     })
 }
-export function startWith(list: string[]) {
+export function startWith (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^[^\*\!]+\*$/)
@@ -33,7 +33,7 @@ export function startWith(list: string[]) {
       return m.slice(0, m.length - 1)
     })
 }
-export function notExact(list: string[]) {
+export function notExact (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\![^\*].*$/)
@@ -42,7 +42,7 @@ export function notExact(list: string[]) {
       return m.slice(1)
     })
 }
-export function notContain(list: string[]) {
+export function notContain (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\!\*.+\*$/)
@@ -51,7 +51,7 @@ export function notContain(list: string[]) {
       return m.slice(2, m.length - 1)
     })
 }
-export function notEndWith(list: string[]) {
+export function notEndWith (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\!\*[^\*]+$/)
@@ -60,7 +60,7 @@ export function notEndWith(list: string[]) {
       return m.slice(2)
     })
 }
-export function notStartWith(list: string[]) {
+export function notStartWith (list: string[]) {
   return list
     .filter(function (m) {
       return m.match(/^\![^\*]+\*$/)
