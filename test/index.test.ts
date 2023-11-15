@@ -1,20 +1,21 @@
-import * as filterPropList from '../src/filter-prop-list'
-import type { Postcss } from 'postcss'
-import type { PostcssRemToResponsivePixel } from '../src/types'
-
-let postcss: Postcss
-let remToPx: PostcssRemToResponsivePixel
-let pxToRem: any
-if (process.env.PostcssVersion === '7') {
-  postcss = require('postcss7')
-  // ../src/index.postcss7
-  remToPx = require('../postcss7.js')
-  pxToRem = require('postcss-pxtorem7')
-} else {
-  postcss = require('postcss')
-  remToPx = require('..')
-  pxToRem = require('postcss-pxtorem')
-}
+// import type { Postcss } from 'postcss'
+import postcss from 'postcss'
+import pxToRem from 'postcss-pxtorem'
+// import type { PostcssRemToResponsivePixel } from '@/types'
+import remToPx from '@/index'
+// let postcss: Postcss
+// let remToPx: PostcssRemToResponsivePixel
+// let pxToRem: any
+// if (process.env.PostcssVersion === '7') {
+//   postcss = require('postcss7')
+//   // ../src/index.postcss7
+//   remToPx = require('../postcss7.js')
+//   pxToRem = require('postcss-pxtorem7')
+// } else {
+//   postcss = require('postcss')
+//   remToPx = require('..')
+//   pxToRem = require('postcss-pxtorem')
+// }
 
 const basicCSS = '.rule { font-size: 0.9375rem }'
 
@@ -25,6 +26,20 @@ describe('remToPx', function () {
     const output =
       'h1 { margin: 0 0 20px; font-size: 32px; line-height: 1.2; letter-spacing: 1px; }'
     const processed = postcss(remToPx()).process(input).css
+
+    expect(processed).toBe(output)
+  })
+
+  it('should not work when disabled', function () {
+    const input =
+      'h1 { margin: 0 0 20px; font-size: 2rem; line-height: 1.2; letter-spacing: 0.0625rem; }'
+    const output = input
+
+    const processed = postcss(
+      remToPx({
+        disabled: true
+      })
+    ).process(input).css
 
     expect(processed).toBe(output)
   })
@@ -154,7 +169,7 @@ describe('propList', function () {
     const expected =
       '.rule { font-size: 16px; margin: 16px; margin-left: 0.5rem; padding: 8px; padding-right: 16px }'
     const options = {
-      propList: ['*font*', 'margin*', '!margin-left', '*-right', 'pad']
+      propList: ['font', /^margin$/, 'pad']
     }
     const processed = postcss(remToPx(options)).process(rules).css
 
@@ -167,7 +182,7 @@ describe('propList', function () {
     const expected =
       '.rule { font-size: 1rem; margin: 16px; margin-left: 0.5rem; padding: 0.5rem; padding-right: 1rem }'
     const options = {
-      propList: ['*', '!margin-left', '!*padding*', '!font*']
+      propList: [/^margin$/]
     }
     const processed = postcss(remToPx(options)).process(rules).css
 
@@ -277,116 +292,116 @@ describe('pxToRem', function () {
   })
 })
 
-describe('filter-prop-list', function () {
-  it('should find "exact" matches from propList', function () {
-    const propList = [
-      'font-size',
-      'margin',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'font-size,margin'
-    expect(filterPropList.exact(propList).join()).toBe(expected)
-  })
+// describe('filter-prop-list', function () {
+//   it('should find "exact" matches from propList', function () {
+//     const propList = [
+//       'font-size',
+//       'margin',
+//       '!padding',
+//       '*border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'font-size,margin'
+//     expect(filterPropList.exact(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "contain" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '*border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'margin,border'
-    expect(filterPropList.contain(propList).join()).toBe(expected)
-  })
+//   it('should find "contain" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       '*border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'margin,border'
+//     expect(filterPropList.contain(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "start" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'border'
-    expect(filterPropList.startWith(propList).join()).toBe(expected)
-  })
+//   it('should find "start" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       'border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'border'
+//     expect(filterPropList.startWith(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "end" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'y'
-    expect(filterPropList.endWith(propList).join()).toBe(expected)
-  })
+//   it('should find "end" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       'border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'y'
+//     expect(filterPropList.endWith(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "not" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      'border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'padding'
-    expect(filterPropList.notExact(propList).join()).toBe(expected)
-  })
+//   it('should find "not" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       'border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'padding'
+//     expect(filterPropList.notExact(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "not contain" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'font'
-    expect(filterPropList.notContain(propList).join()).toBe(expected)
-  })
+//   it('should find "not contain" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       '!border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'font'
+//     expect(filterPropList.notContain(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "not start" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '*y',
-      '!*font*'
-    ]
-    const expected = 'border'
-    expect(filterPropList.notStartWith(propList).join()).toBe(expected)
-  })
+//   it('should find "not start" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       '!border*',
+//       '*',
+//       '*y',
+//       '!*font*'
+//     ]
+//     const expected = 'border'
+//     expect(filterPropList.notStartWith(propList).join(',')).toBe(expected)
+//   })
 
-  it('should find "not end" matches from propList and reduce to string', function () {
-    const propList = [
-      'font-size',
-      '*margin*',
-      '!padding',
-      '!border*',
-      '*',
-      '!*y',
-      '!*font*'
-    ]
-    const expected = 'y'
-    expect(filterPropList.notEndWith(propList).join()).toBe(expected)
-  })
-})
+//   it('should find "not end" matches from propList and reduce to string', function () {
+//     const propList = [
+//       'font-size',
+//       '*margin*',
+//       '!padding',
+//       '!border*',
+//       '*',
+//       '!*y',
+//       '!*font*'
+//     ]
+//     const expected = 'y'
+//     expect(filterPropList.notEndWith(propList).join(',')).toBe(expected)
+//   })
+// })

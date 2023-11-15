@@ -2,16 +2,52 @@
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true,
-    "declarationDir": "dist/types",
+    "rootDirs": [
+      "src",
+      "test"
+    ],
+    "lib": [
+      "ES2016"
+    ],
+    "declaration": false,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": false,
+    "resolveJsonModule": true,
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    }
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ],
+    "types": [
+      "vitest/globals"
+    ]
   },
-  "exclude": ["dist", "node_modules", "test/types"],
-  "include": ["src/**/*", "types/**/*", "test/**/*"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "test/types"
+  ],
+  "include": [
+    "src/**/*",
+    "types/**/*",
+    "test/**/*",
+    "rollup.config.ts"
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
 }

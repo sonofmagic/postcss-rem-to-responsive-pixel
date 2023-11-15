@@ -8,6 +8,7 @@ export const defaultOptions: Required<UserDefinedOptions> = {
   replace: true,
   mediaQuery: false,
   minRemValue: 0,
-  exclude: /node_modules/i,
-  transformUnit: 'px'
+  exclude: [/node_modules/i],
+  transformUnit: 'px',
+  disabled: false
 }
