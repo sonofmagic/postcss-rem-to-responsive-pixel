@@ -1,6 +1,6 @@
 {
   "name": "postcss-rem-to-responsive-pixel",
-  "version": "6.0.0-beta.0",
+  "version": "6.0.0",
   "description": "Convert rem units to px or rpx units using PostCSS. Based on postcss-pxtorem and postcss-rem-to-pixel, and rewrite with typescript, and support Postcss8",
   "exports": {
     ".": {

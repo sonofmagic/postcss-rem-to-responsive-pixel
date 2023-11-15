@@ -3,9 +3,10 @@
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates px or rpx units from rem units.
 
 - Rewrite with `typescript` and well tested.
-- TransformUnit Support `px` and `rpx` !
+- TransformUnit Support `px` and `rpx`!
 
 > If you still use `postcss@7.x`, you should use `postcss-rem-to-responsive-pixel@5.x`
+> [See version 6 breaking changes](./v6.md)
 
 ## Install
 
