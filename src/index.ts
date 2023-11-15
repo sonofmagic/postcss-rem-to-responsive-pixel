@@ -1,9 +1,11 @@
+import type { Rule } from 'postcss'
 import { remRegex } from './regex'
 import type { UserDefinedOptions, PostcssRemToResponsivePixel } from './types'
 import {
   blacklistedSelector,
   createPropListMatcher,
   createRemReplace,
+  createExcludeMatcher,
   declarationExists,
   postcssPlugin,
   getConfig
@@ -11,71 +13,70 @@ import {
 const plugin: PostcssRemToResponsivePixel = (
   options: UserDefinedOptions = {}
 ) => {
-  const opts = getConfig(options)
+  const {
+    exclude,
+    mediaQuery,
+    minRemValue,
+    propList,
+    replace,
+    rootValue,
+    selectorBlackList,
+    transformUnit,
+    unitPrecision,
+    disabled
+  } = getConfig(options)
+  if (disabled) {
+    return {
+      postcssPlugin
+    }
+  }
+  const satisfyPropList = createPropListMatcher(propList)
+  const excludeFn = createExcludeMatcher(exclude)
 
-  const satisfyPropList = createPropListMatcher(opts.propList)
-  const exclude = opts.exclude
-
-  let isExcludeFile = false
-  let pxReplace: (m: string, $1: string) => string
   return {
     postcssPlugin,
-    Once (css) {
+    Once(css) {
       const source = css.source
-      const filePath = source!.input.file as string
-      if (
-        exclude &&
-        ((typeof exclude === 'function' && exclude(filePath)) ||
-          (typeof exclude === 'string' && filePath.indexOf(exclude) !== -1) ||
-          (exclude as RegExp).exec(filePath) !== null)
-      ) {
-        isExcludeFile = true
-      } else {
-        isExcludeFile = false
-      }
-
-      const rootValue =
-        typeof opts.rootValue === 'function'
-          ? opts.rootValue(source!.input)
-          : opts.rootValue
-      pxReplace = createRemReplace(
-        rootValue,
-        opts.unitPrecision,
-        opts.minRemValue,
-        opts.transformUnit
+      const input = source!.input
+      const filePath = input.file as string
+      const isExcludeFile = excludeFn(filePath)
+      if (isExcludeFile) return
+      const _rootValue =
+        typeof rootValue === 'function' ? rootValue(input) : rootValue
+      const pxReplace = createRemReplace(
+        _rootValue,
+        unitPrecision,
+        minRemValue,
+        transformUnit
       )
-    },
-    Declaration (decl) {
-      if (isExcludeFile) return
 
-      if (
-        decl.value.indexOf('rem') === -1 ||
-        !satisfyPropList(decl.prop) ||
-        // @ts-ignore
-        blacklistedSelector(opts.selectorBlackList, decl.parent!.selector)
-      ) {
-        return
-      }
+      css.walkDecls((decl) => {
+        const rule = decl.parent as Rule
+        if (
+          !decl.value.includes('rem') ||
+          !satisfyPropList(decl.prop) ||
+          blacklistedSelector(selectorBlackList, rule.selector)
+        ) {
+          return
+        }
 
-      const value = decl.value.replace(remRegex, pxReplace)
+        const value = decl.value.replace(remRegex, pxReplace)
 
-      // if rem unit already exists, do not add or replace
-      // @ts-ignore
-      if (declarationExists(decl.parent, decl.prop, value)) return
+        if (declarationExists(rule, decl.prop, value)) return
 
-      if (opts.replace) {
-        decl.value = value
-      } else {
-        decl.cloneAfter({ value })
-      }
-    },
-    AtRule (atRule) {
-      if (isExcludeFile) return
+        if (replace) {
+          decl.value = value
+        } else {
+          decl.cloneAfter({ value })
+        }
+      })
 
-      if (opts.mediaQuery && atRule.name === 'media') {
-        if (atRule.params.indexOf('rem') === -1) return
-        atRule.params = atRule.params.replace(remRegex, pxReplace)
-      }
+      css.walkAtRules((atRule) => {
+        if (mediaQuery && atRule.name === 'media') {
+          if (!atRule.params.includes('rem')) return
+          atRule.params = atRule.params.replace(remRegex, pxReplace)
+        }
+      })
     }
   }
 }

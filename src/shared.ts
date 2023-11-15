@@ -1,22 +1,25 @@
-import * as filterPropList from './filter-prop-list'
-import type { ChildNode, Container } from 'postcss'
+import type { Declaration, Rule } from 'postcss'
+// import merge from 'merge'
+import { createDefu } from 'defu'
 import type { UserDefinedOptions } from './types'
-import defu from 'defu'
 import { defaultOptions } from './defaults'
-
 export const postcssPlugin = 'postcss-rem-to-responsive-pixel'
 
-export function getConfig (options: UserDefinedOptions) {
-  if (typeof options === 'undefined') {
-    throw new Error(`${postcssPlugin} plugin does not have the correct options`)
+const defu = createDefu((obj, key, value) => {
+  if (Array.isArray(obj[key]) && Array.isArray(value)) {
+    obj[key] = value
+    return true
   }
-  return defu<UserDefinedOptions, Required<UserDefinedOptions>>(
-    options,
+})
+
+export function getConfig(options?: UserDefinedOptions) {
+  return defu<UserDefinedOptions, Required<UserDefinedOptions>[]>(
+    options!,
     defaultOptions
-  )
+  ) as Required<UserDefinedOptions>
 }
 
-export function createRemReplace (
+export function createRemReplace(
   rootValue: number,
   unitPrecision: number,
   minRemValue: number,
@@ -24,80 +27,68 @@ export function createRemReplace (
 ) {
   return function (m: string, $1: string) {
     if (!$1) return m
-    const rems = parseFloat($1)
+    const rems = Number.parseFloat($1)
     if (rems < minRemValue) return m
     const fixedVal = toFixed(rems * rootValue, unitPrecision)
     return fixedVal === 0 ? '0' : fixedVal + transformUnit
   }
 }
 
-export function toFixed (number: number, precision: number) {
+export function toFixed(number: number, precision: number) {
   const multiplier = Math.pow(10, precision + 1)
   const wholeNumber = Math.floor(number * multiplier)
   return (Math.round(wholeNumber / 10) * 10) / multiplier
 }
 
-export function declarationExists (
-  decls: Container<ChildNode>,
-  prop: string,
-  value: string
-) {
-  // @ts-ignore
-  return decls.some((decl) => decl.prop === prop && decl.value === value)
+export function declarationExists(decls: Rule, prop: string, value: string) {
+  return decls.some((decl) => {
+    const d = decl as Declaration
+    return d.prop === prop && d.value === value
+  })
 }
 
-export function blacklistedSelector (
+export function blacklistedSelector(
   blacklist: (string | RegExp)[],
   selector?: string
 ) {
   if (typeof selector !== 'string') return
   return blacklist.some((regex) => {
     if (typeof regex === 'string') {
-      return selector.indexOf(regex) !== -1
+      return selector.includes(regex)
     }
     return selector.match(regex)
   })
 }
 
-export function createPropListMatcher (propList: string[]) {
-  const hasWild = propList.indexOf('*') > -1
-  const matchAll = hasWild && propList.length === 1
-  const lists = {
-    exact: filterPropList.exact(propList),
-    contain: filterPropList.contain(propList),
-    startWith: filterPropList.startWith(propList),
-    endWith: filterPropList.endWith(propList),
-    notExact: filterPropList.notExact(propList),
-    notContain: filterPropList.notContain(propList),
-    notStartWith: filterPropList.notStartWith(propList),
-    notEndWith: filterPropList.notEndWith(propList)
-  }
+export function createPropListMatcher(propList: (string | RegExp)[]) {
+  const hasWild = propList.includes('*')
+  // const matchAll = hasWild && propList.length === 1
+
   return function (prop: string) {
-    if (matchAll) return true
-    return (
-      (hasWild ||
-        lists.exact.indexOf(prop) > -1 ||
-        lists.contain.some(function (m) {
-          return prop.indexOf(m) > -1
-        }) ||
-        lists.startWith.some(function (m) {
-          return prop.indexOf(m) === 0
-        }) ||
-        lists.endWith.some(function (m) {
-          return prop.indexOf(m) === prop.length - m.length
-        })) &&
-      !(
-        lists.notExact.indexOf(prop) > -1 ||
-        lists.notContain.some(function (m) {
-          return prop.indexOf(m) > -1
-        }) ||
-        lists.notStartWith.some(function (m) {
-          return prop.indexOf(m) === 0
-        }) ||
-        lists.notEndWith.some(function (m) {
-          return prop.indexOf(m) === prop.length - m.length
+    if (hasWild) return true
+    return propList.some((regex) => {
+      if (typeof regex === 'string') {
+        return prop.includes(regex)
+      }
+      return prop.match(regex)
+    })
+  }
+}
+
+export function createExcludeMatcher(
+  exclude: (string | RegExp)[] | ((filePath: string) => boolean)
+) {
+  return function (filepath: string) {
+    if (filepath === undefined) {
+      return false
+    }
+    return Array.isArray(exclude)
+      ? exclude.some((regex) => {
+          if (typeof regex === 'string') {
+            return filepath.includes(regex)
+          }
+          return filepath.match(regex)
         })
-      )
-    )
+      : exclude(filepath)
   }
 }
