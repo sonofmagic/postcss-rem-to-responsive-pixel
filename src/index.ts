@@ -10,6 +10,7 @@ import {
   postcssPlugin,
   getConfig
 } from './shared'
+export * from './types'
 const plugin: PostcssRemToResponsivePixel = (
   options: UserDefinedOptions = {}
 ) => {
