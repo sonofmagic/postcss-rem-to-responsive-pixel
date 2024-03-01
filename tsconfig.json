@@ -7,7 +7,7 @@
       "test"
     ],
     "lib": [
-      "ES2016"
+      "ES2023"
     ],
     "declaration": false,
     "allowSyntheticDefaultImports": true,

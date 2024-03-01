@@ -1,83 +1,26 @@
-import type { Rule } from 'postcss'
-import { remRegex } from './regex'
-import type { UserDefinedOptions, PostcssRemToResponsivePixel } from './types'
-import {
-  blacklistedSelector,
-  createPropListMatcher,
-  createRemReplace,
-  createExcludeMatcher,
-  declarationExists,
-  postcssPlugin,
-  getConfig
-} from './shared'
-export * from './types'
-const plugin: PostcssRemToResponsivePixel = (
+import type { PluginCreator } from 'postcss'
+
+// https://postcss.org/docs/writing-a-postcss-plugin
+// 你可以在这里定义插件用户，可以传入的
+interface UserDefinedOptions {
+  a?: string
+  b?: number
+  // 1rem 多少 px , 默认 1rem = 16px
+  rootValue?: number
+}
+
+// ast 可视化网站:
+// https://astexplorer.net/
+const plugin: PluginCreator<UserDefinedOptions> = (
   options: UserDefinedOptions = {}
 ) => {
-  const {
-    exclude,
-    mediaQuery,
-    minRemValue,
-    propList,
-    replace,
-    rootValue,
-    selectorBlackList,
-    transformUnit,
-    unitPrecision,
-    disabled
-  } = getConfig(options)
-  if (disabled) {
-    return {
-      postcssPlugin
-    }
-  }
-  const satisfyPropList = createPropListMatcher(propList)
-  const excludeFn = createExcludeMatcher(exclude)
-
   return {
-    postcssPlugin,
-    Once(css) {
-      const source = css.source
-      const input = source!.input
-      const filePath = input.file as string
-      const isExcludeFile = excludeFn(filePath)
-      if (isExcludeFile) return
-      const _rootValue =
-        typeof rootValue === 'function' ? rootValue(input) : rootValue
-      const pxReplace = createRemReplace(
-        _rootValue,
-        unitPrecision,
-        minRemValue,
-        transformUnit
-      )
-
-      css.walkDecls((decl) => {
-        const rule = decl.parent as Rule
-        if (
-          !decl.value.includes('rem') ||
-          !satisfyPropList(decl.prop) ||
-          blacklistedSelector(selectorBlackList, rule.selector)
-        ) {
-          return
-        }
-
-        const value = decl.value.replace(remRegex, pxReplace)
-
-        if (declarationExists(rule, decl.prop, value)) return
-
-        if (replace) {
-          decl.value = value
-        } else {
-          decl.cloneAfter({ value })
-        }
-      })
-
-      css.walkAtRules((atRule) => {
-        if (mediaQuery && atRule.name === 'media') {
-          if (!atRule.params.includes('rem')) return
-          atRule.params = atRule.params.replace(remRegex, pxReplace)
-        }
-      })
+    postcssPlugin: 'postcss-my-rem2px-plugin',
+    Rule(rule, helper) {},
+    AtRule(atRule, helper) {},
+    Declaration(decl, { Rule }) {
+      // 你可以在 regex101 进行正则表达式的测试
+      // 从而对 decl.value 这个字符串的值进行解析和替换
     }
   }
 }
