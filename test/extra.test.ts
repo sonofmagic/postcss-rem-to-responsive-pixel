@@ -50,21 +50,7 @@ describe('remToPx', () => {
 
 //     expect(processed).toBe(expected)
 //   })
-
-//   it('should not replace values with an uppercase R or REM', function () {
-//     const options = {
-//       propList: ['*']
-//     }
-//     const rules =
-//       '.rule { margin: 0.75rem calc(100% - 14REM); height: calc(100% - 1.25rem); font-size: 12Rem; line-height: 1rem; }'
-//     const expected =
-//       '.rule { margin: 12px calc(100% - 14REM); height: calc(100% - 20px); font-size: 12Rem; line-height: 16px; }'
-//     const processed = postcss(remToPx(options)).process(rules).css
-
-//     expect(processed).toBe(expected)
-//   })
 // })
-
 // describe('unitPrecision', function () {
 //   it('should replace using a decimal of 2 places', function () {
 //     const rules = '.rule { font-size: 0.534375rem }'
