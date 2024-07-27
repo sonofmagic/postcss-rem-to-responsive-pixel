@@ -100,7 +100,7 @@
     "postcss": "^8.4.35",
     "postcss-pxtorem": "^6.1.0",
     "prettier": "^3.2.5",
-    "semantic-release": "^23.0.2",
+    "semantic-release": "^24.0.0",
     "ts-node": "^10.9.2",
     "ts-patch": "^3.1.2",
     "tsconfig-paths": "^4.2.0",
