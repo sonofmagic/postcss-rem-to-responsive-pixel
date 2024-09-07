@@ -1,5 +1,8 @@
 # postcss-rem-to-responsive-pixel
 
+> [!IMPORTANT]
+> Code has been moved to [sonofmagic/postcss-plugins](https://github.com/sonofmagic/postcss-plugins), this repo is archived!
+
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates px or rpx units from rem units.
 
 - Rewrite with `typescript` and well tested.
