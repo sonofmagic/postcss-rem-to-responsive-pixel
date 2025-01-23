@@ -97,7 +97,7 @@ importers:
         version: 5.5.4
       typescript-transform-paths:
         specifier: ^3.4.7
-        version: 3.4.9(typescript@5.5.4)
+        version: 3.5.3(typescript@5.5.4)
       unbuild:
         specifier: ^2.0.0
         version: 2.0.0(typescript@5.5.4)
@@ -3267,8 +3267,8 @@ packages:
     resolution: {integrity: sha512-yMi0PlwuznKHxKmcpoOdeLwxBoVPkqZxd7q2FgMkmD3bNwvF5VW0+UlUQ1k1vmktTu4Yu13Q0RIxEP8+B+wloA==}
     engines: {node: '>= 0.4'}
 
-  typescript-transform-paths@3.4.9:
-    resolution: {integrity: sha512-eYIFq8+99A593rl7s+JTDeqEU3NsEnTe4umd0jEHIqqyPyatOtij8rol6Mkd9lZYC+4p9d8dhFq5oHjpi/gaSQ==}
+  typescript-transform-paths@3.5.3:
+    resolution: {integrity: sha512-5y2l2iPKNHKOj08/1i+02+ljBVUhWcXQLXomiOXCmNpiTuSxIkj0dM1LUE7OOAt53+/6KidY+sFTCP781J64Eg==}
     peerDependencies:
       typescript: '>=3.6.5'
 
@@ -6655,9 +6655,9 @@ snapshots:
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
 
-  typescript-transform-paths@3.4.9(typescript@5.5.4):
+  typescript-transform-paths@3.5.3(typescript@5.5.4):
     dependencies:
-      minimatch: 3.1.2
+      minimatch: 9.0.5
       typescript: 5.5.4
 
   typescript@5.5.4: {}
